@@ -12,6 +12,6 @@ public class Hookah {
     @SerializedName("isFree")
     boolean isFree;
 
-    Hookah() {
+    public Hookah() {
     }
 }
