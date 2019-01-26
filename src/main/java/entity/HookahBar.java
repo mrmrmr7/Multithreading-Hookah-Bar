@@ -3,15 +3,25 @@ package entity;
 import util.AppConstant;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 public class HookahBar {
-
+    private Semaphore barSemaphore;
+    private Semaphore hookahSemaphore;
     private List<Hookah> hookahs;
     private int clientsInBarMaxCount;
     private int clientsInBarNow;
     private final static HookahBar INSTANCE = new HookahBar();
 
     private HookahBar() {
+    }
+
+    public void setBarSemaphore(Semaphore semaphore) {
+        this.barSemaphore = semaphore;
+    }
+
+    public void setHookahSemaphore(Semaphore semaphore) {
+        this.hookahSemaphore = semaphore;
     }
 
     public static HookahBar getInstance() {
@@ -46,22 +56,19 @@ public class HookahBar {
         return (clientsInBarNow >= clientsInBarMaxCount);
     }
 
-    public void addNowClientCount() {
-        clientsInBarNow++;
+    public void addBarClient() throws InterruptedException {
+        barSemaphore.acquire();
     }
 
-    public int getFreeHookah() {
-        for (int i = 0; i < hookahs.size(); i++) {
-            if (hookahs.get(i).isFree()) {
-                hookahs.get(i).setFree(false);
-                return i;
-            }
-        }
-
-        return AppConstant.NO_FREE_HOOKAH;
+    public void removeBarClient() {
+        barSemaphore.release();
     }
 
-    public void releaseHookah(int hookahNum) {
-        hookahs.get(hookahNum).setFree(true);
+    public void addHookahClient() throws InterruptedException {
+        hookahSemaphore.acquire();
+    }
+
+    public void removeHookahClient() {
+        hookahSemaphore.release();
     }
 }
