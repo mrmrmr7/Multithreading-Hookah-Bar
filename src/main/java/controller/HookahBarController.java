@@ -13,8 +13,14 @@ public class HookahBarController{
     }
 
     public void addAllClient(List<Runnable> clientList) {
-        clientList
-                .forEach(executorService::submit);
+        for (int i = 0; i < clientList.size(); i++) {
+            executorService.submit(clientList.get(i));
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void addClient(Runnable client) {

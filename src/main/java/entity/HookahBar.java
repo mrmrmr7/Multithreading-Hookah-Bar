@@ -56,19 +56,38 @@ public class HookahBar {
         return (clientsInBarNow >= clientsInBarMaxCount);
     }
 
-    public void addBarClient() throws InterruptedException {
-        barSemaphore.acquire();
+    public synchronized void addBarClient() throws InterruptedException {
+        while (true) {
+            if (clientsInBarNow < clientsInBarMaxCount) {
+                clientsInBarNow++;
+                barSemaphore.acquire();
+                break;
+            }
+            System.out.println("Not found place");
+            Thread.sleep(100);
+        }
     }
 
     public void removeBarClient() {
+        clientsInBarNow--;
         barSemaphore.release();
     }
 
-    public void addHookahClient() throws InterruptedException {
-        hookahSemaphore.acquire();
+    public synchronized int getHookah() throws InterruptedException {
+        while (true) {
+            for (int i = 0; i < hookahs.size(); i++) {
+                if (hookahs.get(i).isFree()) {
+                    hookahs.get(i).setFree(false);
+                    hookahSemaphore.acquire();
+                    return i;
+                }
+            }
+            Thread.sleep(100);
+        }
     }
 
-    public void removeHookahClient() {
+    public void removeHookah(int num) {
+        hookahs.get(num).setFree(true);
         hookahSemaphore.release();
     }
 }

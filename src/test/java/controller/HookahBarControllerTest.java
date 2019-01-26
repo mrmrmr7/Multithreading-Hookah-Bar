@@ -21,6 +21,7 @@ class HookahBarControllerTest {
 
         HookahBarBuilder barBuilder = new HookahBarBuilder();
         barBuilder.configure(hookahList, 10);
+        HookahBar hookahBar = HookahBar.getInstance();
 
         HookahBarController barController = new HookahBarController();
 
@@ -28,6 +29,9 @@ class HookahBarControllerTest {
         clientList.add(new Client("Maks"));
         clientList.add(new Client("Nikita"));
         clientList.add(new Client("Alexandr"));
+        clientList.add(new Client("Valerka"));
+        clientList.add(new Client("Egor"));
+        clientList.add(new Client("Bogdan"));
 
         barController.addAllClient(clientList);
 

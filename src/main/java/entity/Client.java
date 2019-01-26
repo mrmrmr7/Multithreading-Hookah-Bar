@@ -1,7 +1,6 @@
 package entity;
 
 import com.google.gson.annotations.SerializedName;
-import util.AppConstant;
 
 public class Client implements Runnable {
     @SerializedName("name")
@@ -13,7 +12,7 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(this.name + " find bar!");
+        System.out.println(this.name + " find bar");
         HookahBar hookahBar = HookahBar.getInstance();
 
         try {
@@ -23,14 +22,22 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
 
+        int num = 0;
+
         try {
-            hookahBar.addHookahClient();
-            System.out.println(name + " get hookah");
+            num = hookahBar.getHookah();
+            System.out.println(name + " get hookah " + num);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        hookahBar.removeHookahClient();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(name + " release hookah");
+        hookahBar.removeHookah(num);
         hookahBar.removeBarClient();
     }
 
