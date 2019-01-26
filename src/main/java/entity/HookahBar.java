@@ -6,13 +6,14 @@ import util.StringPool;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class HookahBar {
     private Semaphore barSemaphore;
     private Semaphore hookahSemaphore;
     private List<Hookah> hookahs;
     private int clientsInBarMaxCount;
-    private int clientsInBarNow;
+    private final AtomicInteger clientsInBarNow = new AtomicInteger(0);
     private final static HookahBar INSTANCE = new HookahBar();
 
     private HookahBar() {
@@ -47,31 +48,22 @@ public class HookahBar {
     }
 
     public int getClientsInBarNow() {
-        return clientsInBarNow;
-    }
-
-    public void setClientsInBarNow(int clientsInBarNow) {
-        this.clientsInBarNow = clientsInBarNow;
-    }
-
-    public boolean isFull() {
-        return (clientsInBarNow >= clientsInBarMaxCount);
+        return clientsInBarNow.get();
     }
 
     public synchronized void addBarClient() throws InterruptedException {
         while (true) {
-            if (clientsInBarNow < clientsInBarMaxCount) {
-                clientsInBarNow++;
-                System.out.println(MessageFormat.format(StringPool.IN_BAR_NOW, clientsInBarNow));
+            if (clientsInBarNow.get() < clientsInBarMaxCount) {
+                clientsInBarNow.incrementAndGet();
                 barSemaphore.acquire();
                 break;
             }
-            Thread.sleep(100);
+            Thread.sleep(AppConstant.CHECK_BAR_PLACE_PING);
         }
     }
 
     public void removeBarClient() {
-        clientsInBarNow--;
+        clientsInBarNow.decrementAndGet();
         barSemaphore.release();
     }
 
@@ -84,13 +76,12 @@ public class HookahBar {
                     return i;
                 }
             }
-            Thread.sleep(100);
+            Thread.sleep(500);
         }
     }
 
     public void removeHookah(int num) {
         hookahs.get(num).setFree(true);
-        System.out.println(MessageFormat.format(StringPool.IN_BAR_NOW, clientsInBarNow));
         hookahSemaphore.release();
     }
 }

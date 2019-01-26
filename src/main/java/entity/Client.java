@@ -2,9 +2,9 @@ package entity;
 
 import com.google.gson.annotations.SerializedName;
 import com.sun.xml.internal.ws.api.message.Message;
+import util.AppConstant;
 import util.StringPool;
 
-import javax.annotation.processing.Messager;
 import java.text.MessageFormat;
 
 public class Client implements Runnable {
@@ -37,13 +37,16 @@ public class Client implements Runnable {
         }
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(AppConstant.TIME_OF_SMOKE);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(MessageFormat.format(StringPool.LEAVE_BAR, name));
+
+        System.out.println(MessageFormat.format(StringPool.RETURN_HOOKAH, name, num));
         hookahBar.removeHookah(num);
         hookahBar.removeBarClient();
+        System.out.println(MessageFormat.format(StringPool.LEAVE_BAR, name));
+        System.out.println(MessageFormat.format(StringPool.IN_BAR_NOW, hookahBar.getClientsInBarNow()));
     }
 
     public String getName() {

@@ -12,7 +12,6 @@ public class HookahBarBuilder {
         HookahBar hookahBar = HookahBar.getInstance();
         hookahBar.setHookahs(hookahList);
         hookahBar.setClientsInBarMaxCount(maxCilentsInBar);
-        hookahBar.setClientsInBarNow(0);
         hookahBar.setBarSemaphore(new Semaphore(AppConstant.MAX_THREAD_COUNT, true));
         hookahBar.setHookahSemaphore(new Semaphore(hookahBar.getHookahs().size(), true));
     }
