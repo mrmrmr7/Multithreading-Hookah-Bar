@@ -1,7 +1,9 @@
 package entity;
 
 import util.AppConstant;
+import util.StringPool;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -60,10 +62,10 @@ public class HookahBar {
         while (true) {
             if (clientsInBarNow < clientsInBarMaxCount) {
                 clientsInBarNow++;
+                System.out.println(MessageFormat.format(StringPool.IN_BAR_NOW, clientsInBarNow));
                 barSemaphore.acquire();
                 break;
             }
-            System.out.println("Not found place");
             Thread.sleep(100);
         }
     }
@@ -88,6 +90,7 @@ public class HookahBar {
 
     public void removeHookah(int num) {
         hookahs.get(num).setFree(true);
+        System.out.println(MessageFormat.format(StringPool.IN_BAR_NOW, clientsInBarNow));
         hookahSemaphore.release();
     }
 }

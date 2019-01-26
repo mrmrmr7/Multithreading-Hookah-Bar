@@ -38,6 +38,12 @@ class HookahBarControllerTest {
         int actual = HookahBar.getInstance().getClientsInBarMaxCount();
         int expected = 10;
 
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         barController.executorService.shutdown();
 
         assertEquals(actual, expected);
