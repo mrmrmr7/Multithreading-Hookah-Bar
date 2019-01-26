@@ -16,19 +16,25 @@ class HookahBarControllerTest {
     @Test
     void hookahBarControllerTest() {
         List<Hookah> hookahList = new ArrayList<>();
-        hookahList.add(new Hookah());
-        hookahList.add(new Hookah());
-        HookahBarBuilder barBuilder = new HookahBarBuilder();
-        HookahBar hookahBar = barBuilder.build(hookahList, 10);
-        HookahBarController barController = new HookahBarController(hookahBar);
+        hookahList.add(new Hookah("Some", 152));
+        hookahList.add(new Hookah("Next after some", 164));
 
-        List<Client> clientList = new ArrayList<>();
+        HookahBarBuilder barBuilder = new HookahBarBuilder();
+        barBuilder.configure(hookahList, 10);
+
+        HookahBarController barController = new HookahBarController();
+
+        List<Runnable> clientList = new ArrayList<>();
         clientList.add(new Client("Maks"));
         clientList.add(new Client("Nikita"));
         clientList.add(new Client("Alexandr"));
 
-        int actual = barController.getHookahBar().getClientsMaxCount();
+        barController.addAllClient(clientList);
+
+        int actual = HookahBar.getInstance().getClientsInBarMaxCount();
         int expected = 10;
+
+        barController.executorService.shutdown();
 
         assertEquals(actual, expected);
     }

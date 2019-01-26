@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HookahBarBuilderTest {
 
     @Test
-    void buildTest() {
+    void configureTest() {
         int maxClientsInBar = 7;
         int withoutClients = 0;
 
@@ -21,11 +21,12 @@ class HookahBarBuilderTest {
         hookahList.add(new Hookah());
 
         HookahBarBuilder hookahBarBuilder = new HookahBarBuilder();
-        HookahBar hookahBar = hookahBarBuilder.build(hookahList, maxClientsInBar);
+        hookahBarBuilder.configure(hookahList, maxClientsInBar);
 
-        boolean isBuildedRight &= hookahBar.getClientsInBarMaxCount().equals(maxClientsInBar);
-        isBuildedRight &= hookahBar.getClientsInBarNow().equals(withoutClients);
-        isBuildedRight &= hookahBar.getHookahList().size().equals(hookahList.size());
+        boolean isBuildedRight = true;
+        isBuildedRight &= (HookahBar.getInstance().getClientsInBarMaxCount() == maxClientsInBar);
+        isBuildedRight &= (HookahBar.getInstance().getClientsInBarNow() == withoutClients);
+        isBuildedRight &= (HookahBar.getInstance().getHookahs().size() == hookahList.size());
         assertTrue(isBuildedRight);
     }
 }

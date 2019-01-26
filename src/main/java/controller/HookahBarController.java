@@ -1,19 +1,23 @@
 package controller;
 
-import entity.Client;
-import entity.HookahBar;
+import util.AppConstant;
 
 import java.util.List;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HookahBarController{
-    private Semaphore hookahSemaphore;
-    private Semaphore barClientSemaphore;
-    private HookahBar hookahBar;
+    ExecutorService executorService = Executors.newFixedThreadPool(AppConstant.MAX_THREAD_COUNT);
 
-    public HookahBarController(HookahBar hookahBar) {
+    public HookahBarController() {
     }
 
-    public void start(List<Client> clientList) {
+    public void addAllClient(List<Runnable> clientList) {
+        clientList
+                .forEach(executorService::submit);
+    }
+
+    public void addClient(Runnable client) {
+        executorService.submit(client);
     }
 }

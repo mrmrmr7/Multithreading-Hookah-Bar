@@ -15,7 +15,7 @@ class HookahListValidatorTest {
         List<Hookah> hookahs = new ArrayList<>();
         hookahs.add(new Hookah());
         hookahs.add(new Hookah());
-        HookahListValidator hookahListValidator = new HookahListValidator();
+        HookahValidator hookahListValidator = new HookahValidator();
         boolean areValid = hookahListValidator.validate(hookahs);
         assertTrue(areValid);
     }
