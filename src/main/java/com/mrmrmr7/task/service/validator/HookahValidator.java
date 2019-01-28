@@ -11,8 +11,6 @@ public class HookahValidator {
                 return false;
             } else if (hookah.getName().isEmpty()) {
                 return false;
-            } else if (!hookah.isFree()) {
-                return false;
             }
         }
 
@@ -23,8 +21,6 @@ public class HookahValidator {
         if (hookah.getCost() < 0) {
             return false;
         } else if (hookah.getName().isEmpty()) {
-            return false;
-        } else if (!hookah.isFree()) {
             return false;
         }
 

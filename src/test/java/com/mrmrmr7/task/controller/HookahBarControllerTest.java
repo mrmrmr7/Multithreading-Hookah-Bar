@@ -1,6 +1,7 @@
 package com.mrmrmr7.task.controller;
 
-import com.mrmrmr7.task.entity.Client;
+import com.mrmrmr7.task.entity.CompanyClient;
+import com.mrmrmr7.task.entity.SingleClient;
 import com.mrmrmr7.task.entity.Hookah;
 import com.mrmrmr7.task.entity.HookahBar;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,8 @@ class HookahBarControllerTest {
     @Test
     void hookahBarControllerTest() {
         List<Hookah> hookahList = new ArrayList<>();
-        hookahList.add(new Hookah("Some", 152));
-        hookahList.add(new Hookah("Next after some", 164));
+        hookahList.add(new Hookah("Some", 152, 2));
+        hookahList.add(new Hookah("Next", 164, 1));
 
         HookahBarBuilder barBuilder = new HookahBarBuilder();
         barBuilder.configure(hookahList, 10);
@@ -26,16 +27,28 @@ class HookahBarControllerTest {
         HookahBarController barController = new HookahBarController();
 
         List<Runnable> clientList = new ArrayList<>();
-        clientList.add(new Client("Maks"));
-        clientList.add(new Client("Nikita"));
-        clientList.add(new Client("Alexandr"));
-        clientList.add(new Client("Valerka"));
-        clientList.add(new Client("Egor"));
-        clientList.add(new Client("Bogdan"));
+        clientList.add(new SingleClient("Maks", true, "Next"));
+        clientList.add(new SingleClient("Nikita", true, "Next"));
+        clientList.add(new SingleClient("Alexandr", true, "Next"));
+        clientList.add(new SingleClient("Valerka", true, "Next"));
+        clientList.add(new SingleClient("Egor", true, "Next"));
+        clientList.add(new SingleClient("Bogdan", true, "Next"));
+        clientList.add(new SingleClient("Valerka", true, "Next"));
+        clientList.add(new SingleClient("Egor", true, "Next"));
+        clientList.add(new SingleClient("Bogdan", true, "Next"));
+        clientList.add(new SingleClient("Valerka", true, "Next"));
+        clientList.add(new SingleClient("Egor", true));
+        clientList.add(new SingleClient("Bogdan", true));
+
+        List<String> company = new ArrayList<>();
+        company.add("Kesha");
+        company.add("Marisha");
+
+        clientList.add(new CompanyClient("IIIIIIIIIIIIIRIIIIIIIIIIIISKA", company, false));
 
         barController.addAllClient(clientList);
 
-        barController.addClient(new Client("Kesha"));
+        barController.addClient(new SingleClient("Kesha", true));
 
         int actual = HookahBar.getInstance().getClientsInBarMaxCount();
         int expected = 10;

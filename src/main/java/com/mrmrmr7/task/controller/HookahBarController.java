@@ -2,41 +2,41 @@ package com.mrmrmr7.task.controller;
 
 import com.mrmrmr7.task.entity.HookahBar;
 import com.mrmrmr7.task.util.AppConstant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class HookahBarController{
-    ExecutorService executorService = Executors.newFixedThreadPool(AppConstant.MAX_THREAD_COUNT);
-    HookahBar hookahBar = HookahBar.getInstance();
+class HookahBarController{
+    private ExecutorService executorService = Executors.newFixedThreadPool(AppConstant.MAX_THREAD_COUNT);
+    private HookahBar hookahBar = HookahBar.getInstance();
+    private Logger logger = LogManager.getLogger(HookahBarController.class);
 
-    public HookahBarController() {
-    }
-
-    public void addAllClient(List<Runnable> clientList) {
-        for (int i = 0; i < clientList.size(); i++) {
-            executorService.submit(clientList.get(i));
+    void addAllClient(List<Runnable> clientList) {
+        for (Runnable client : clientList) {
+            executorService.submit(client);
             try {
                 Thread.sleep(AppConstant.CLIENT_ENTER_PING);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error("Thread has InterruptedException exception", e);
             }
         }
     }
 
-    public void closeEmptyBar() {
-        while (hookahBar.getClientsInBarNow().get() > 0) {
-            try {
-                Thread.sleep(AppConstant.CHECK_FOR_EMPTY_BAR_PING);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    void closeEmptyBar() {
+        try {
+            while (hookahBar.getClientsInBarNow().get() > 0) {
+                    Thread.sleep(AppConstant.CHECK_FOR_EMPTY_BAR_PING);
             }
+        } catch (InterruptedException e) {
+            logger.error("Thread has InterruptedException exception", e);
         }
         executorService.shutdown();
     }
 
-    public void addClient(Runnable client) {
+    void addClient(Runnable client) {
         executorService.submit(client);
     }
 }

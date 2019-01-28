@@ -14,16 +14,18 @@ class JSONHookahBuilderTest {
     @Test
     void buildTest() {
         JSONHookahBuilder hookahBuilder = new JSONHookahBuilder();
-        List<Hookah> actualHookahs = null;
+        List<Hookah> actualHookahs = new ArrayList<>();
+
         try {
-            actualHookahs = hookahBuilder.build("src/main/resources/hookah");
+            actualHookahs.addAll(hookahBuilder.build("src/main/resources/hookah"));
         } catch (InvalidHookahException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         List<Hookah> expectedHookahs = new ArrayList<>();
-        expectedHookahs.add(new Hookah("MeatHookah1", 1));
+        expectedHookahs.add(new Hookah("MeatHookah1", 5));
         expectedHookahs.add(new Hookah());
         assertEquals(expectedHookahs.get(0).toString(), actualHookahs.get(0).toString());
     }

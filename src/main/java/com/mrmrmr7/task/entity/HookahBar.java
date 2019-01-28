@@ -12,9 +12,6 @@ public class HookahBar {
     private final AtomicInteger clientsInBarNow = new AtomicInteger(0);
     private final static HookahBar INSTANCE = new HookahBar();
 
-    private HookahBar() {
-    }
-
     public static HookahBar getInstance() {
         return INSTANCE;
     }

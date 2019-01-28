@@ -1,7 +1,7 @@
 package com.mrmrmr7.task.service.builder;
 
 import com.google.gson.Gson;
-import com.mrmrmr7.task.entity.Client;
+import com.mrmrmr7.task.entity.SingleClient;
 import com.mrmrmr7.task.service.validator.ClientValidator;
 
 import java.io.IOException;
@@ -11,21 +11,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class JSONClientBuilder {
-    public List<Client> build(String JSONPath) throws IOException, InvalidClientException {
+    public List<SingleClient> build(String JSONPath) throws IOException, InvalidClientException {
 
         Gson gson = new Gson();
         String content = "";
 
         content = new String(Files.readAllBytes(Paths.get(JSONPath)));
 
-        List<Client> clientList = Arrays.asList(gson.fromJson(content, Client[].class));
+        List<SingleClient> singleClientList = Arrays.asList(gson.fromJson(content, SingleClient[].class));
 
         ClientValidator clientValidator = new ClientValidator();
 
-        if (!clientValidator.validate(clientList)) {
-            throw new InvalidClientException("Client list has error");
+        if (!clientValidator.validate(singleClientList)) {
+            throw new InvalidClientException("SingleClient list has error");
         }
 
-        return clientList;
+        return singleClientList;
     }
 }

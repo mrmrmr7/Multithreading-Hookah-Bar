@@ -1,13 +1,27 @@
 package com.mrmrmr7.task.service;
 
+import com.mrmrmr7.task.entity.Hookah;
 import com.mrmrmr7.task.entity.HookahBar;
 import com.mrmrmr7.task.util.AppConstant;
 
+import java.util.List;
+
 public class HookahBarService {
-    HookahBar bar = HookahBar.getInstance();
-    public synchronized void addBarClient() throws InterruptedException {
-        bar.getBarSemaphore().acquire();
-        bar.getClientsInBarNow().incrementAndGet();
+    private HookahBar bar = HookahBar.getInstance();
+
+    public synchronized boolean tryAddBarClient() throws InterruptedException {
+        int timeOutCounter = 0;
+        while (!bar.getBarSemaphore().tryAcquire()) {
+            Thread.sleep(100);
+            timeOutCounter++;
+        }
+
+        if (timeOutCounter < 10) {
+            bar.getClientsInBarNow().incrementAndGet();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void removeBarClient() {
@@ -15,34 +29,49 @@ public class HookahBarService {
         bar.getBarSemaphore().release();
     }
 
-    public synchronized int getFreeHookah() throws InterruptedException, FreeHookahNotFoundException {
-        bar.getHookahSemaphore().acquire();
-        int res = AppConstant.FREE_HOOKAH_NOT_FOUND;
-        for (int i = 0; i < bar.getHookahs().size(); i++) {
-            if (bar.getHookahs().get(i).isFree()) {
-                bar.getHookahs().get(i).setFree(false);
-                res = i;
-                break;
-            }
-        }
-
-        if (res == AppConstant.FREE_HOOKAH_NOT_FOUND) {
-            throw new FreeHookahNotFoundException("It impossible, but exception must be");
-        }
-        return res;
-    }
-
-    public void removeHookah(int num) {
-        bar.getHookahs().get(num).setFree(true);
-        bar.getHookahSemaphore().release();
-    }
-
     public int getClientsInBarNow() {
         return bar.getClientsInBarNow().get();
     }
 
-
     public String getHookahNameByNum(int num) {
         return bar.getHookahById(num).getName();
+    }
+
+    public synchronized int getFreeHookah(String name) throws InterruptedException, FreeHookahNotFoundException {
+        List<Hookah> hookahList = bar.getHookahs();
+        if (name.equalsIgnoreCase("ANY")) {
+            bar.getHookahSemaphore().acquire();
+
+            for (int i = 0; i < hookahList.size(); i++) {
+                if (hookahList.get(i).getCountFree() > 0) {
+                    hookahList.get(i).decCountFree();
+                    return i;
+                }
+            }
+
+            throw new FreeHookahNotFoundException("Free hookah not found");
+        } else {
+            int timeOutCheck = 0;
+
+            while (timeOutCheck < 10) {
+                for (int i = 0; i < hookahList.size(); i++) {
+                    if (hookahList.get(i).getName().equalsIgnoreCase(name)
+                            && hookahList.get(i).getCountFree() > 0) {
+                        bar.getHookahSemaphore().acquire();
+                        hookahList.get(i).decCountFree();
+                        return i;
+                    }
+                }
+                Thread.sleep(100);
+                timeOutCheck++;
+            }
+
+            return AppConstant.TIME_OUT;
+        }
+    }
+
+    public void removeHookah(int num) {
+        bar.getHookahs().get(num).incCountFree();
+        bar.getHookahSemaphore().release();
     }
 }

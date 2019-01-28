@@ -1,11 +1,17 @@
 [
   {
-    "name": "Maxim"
+    "name": "Maxim",
+    "wantHookah": true,
+    "hookahName": "Meat"
   },
   {
-    "name": "Nikita"
+    "name": "Nikita",
+    "wantHookah": true,
+    "hookahName": "Mint"
   },
   {
-    "name": "Alexandr"
+    "name": "Alexandr",
+    "wantHookah": true,
+    "hookahName": "any"
   }
 ]

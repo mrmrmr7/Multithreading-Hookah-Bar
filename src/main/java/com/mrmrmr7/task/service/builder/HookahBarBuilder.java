@@ -13,6 +13,11 @@ public class HookahBarBuilder {
         hookahBar.setHookahs(hookahList);
         hookahBar.setClientsInBarMaxCount(maxCilentsInBar);
         hookahBar.setBarSemaphore(new Semaphore(AppConstant.MAX_THREAD_COUNT, true));
-        hookahBar.setHookahSemaphore(new Semaphore(hookahBar.getHookahs().size(), true));
+        List<Hookah> hookahs = hookahBar.getHookahs();
+        int hookahCount = hookahs
+                .stream()
+                .mapToInt(Hookah::getCountAll)
+                .sum();
+        hookahBar.setHookahSemaphore(new Semaphore(hookahCount, true));
     }
 }

@@ -12,15 +12,10 @@
     </Appenders>
 
     <Loggers>
-        <logger name="com.mrmrmr7.task" level="error">
-            <AppenderRef ref="File"/>
-        </logger>
-
         <logger name="com.mrmrmr7.task" level="info">
             <AppenderRef ref="File"/>
         </logger>
 
-        <!-- Root Logger -->
         <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>

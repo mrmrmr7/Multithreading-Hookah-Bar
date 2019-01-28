@@ -1,7 +1,8 @@
 [
   {
     "name": "MeatHookah1",
-    "cost": 1
+    "cost": 5,
+    "count": 1
   },
 
   {
