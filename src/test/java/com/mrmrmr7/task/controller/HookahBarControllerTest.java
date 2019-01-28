@@ -27,34 +27,38 @@ class HookahBarControllerTest {
         HookahBarController barController = new HookahBarController();
 
         List<Runnable> clientList = new ArrayList<>();
-        clientList.add(new SingleClient("Maks", true, "Next"));
-        clientList.add(new SingleClient("Nikita", true, "Next"));
-        clientList.add(new SingleClient("Alexandr", true, "Next"));
-        clientList.add(new SingleClient("Valerka", true, "Next"));
-        clientList.add(new SingleClient("Egor", true, "Next"));
-        clientList.add(new SingleClient("Bogdan", true, "Next"));
-        clientList.add(new SingleClient("Valerka", true, "Next"));
-        clientList.add(new SingleClient("Egor", true, "Next"));
-        clientList.add(new SingleClient("Bogdan", true, "Next"));
-        clientList.add(new SingleClient("Valerka", true, "Next"));
-        clientList.add(new SingleClient("Egor", true));
-        clientList.add(new SingleClient("Bogdan", true));
+        clientList.add(new SingleClient("1", true, "Next"));
+        clientList.add(new SingleClient("2", true, "Next"));
+        clientList.add(new SingleClient("3", true, "Next"));
+        clientList.add(new SingleClient("4", true, "Next"));
+        clientList.add(new SingleClient("5", true, "Next"));
+        clientList.add(new SingleClient("6", true, "Next"));
+        clientList.add(new SingleClient("7", true, "Next"));
+        clientList.add(new SingleClient("8", true, "Next"));
+        clientList.add(new SingleClient("9", true, "Next"));
+        clientList.add(new SingleClient("10", true, "Next"));
+        clientList.add(new SingleClient("11", true));
+        clientList.add(new SingleClient("12", true));
 
         List<String> company = new ArrayList<>();
-        company.add("Kesha");
-        company.add("Marisha");
+        company.add("13");
+        company.add("14");
 
         clientList.add(new CompanyClient("IIIIIIIIIIIIIRIIIIIIIIIIIISKA", company, false));
 
         barController.addAllClient(clientList);
 
         barController.addClient(new SingleClient("Kesha", true));
+        barController.closeEmptyBar();
 
         int actual = HookahBar.getInstance().getClientsInBarMaxCount();
         int expected = 10;
 
-        barController.closeEmptyBar();
-
         assertEquals(actual, expected);
+    }
+
+    @Test
+    void hookahBarControllerInterruptExceptionTest() {
+
     }
 }

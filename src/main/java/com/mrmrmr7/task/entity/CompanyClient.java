@@ -46,6 +46,7 @@ public class CompanyClient implements Client, Runnable {
         try {
             hookahBar.tryAddBarClient();
             logger.info(MessageFormat.format(StringPool.COME_TO_BAR, liderName));
+
             if (wantHookah) {
                 int freeHookahNum = hookahBar.getFreeHookah(this.hookahName);
 
@@ -57,9 +58,14 @@ public class CompanyClient implements Client, Runnable {
 
                 hookahBar.removeHookah(freeHookahNum);
             }
+
+            hookahBar.removeBarClient();
+            logger.info(MessageFormat.format(StringPool.LEAVE_BAR, liderName)
+                    + " and " + String.join(", ", friends) + "\n"
+                    + MessageFormat.format(StringPool.IN_BAR_NOW, hookahBar.getClientsInBarNow()));
         } catch (InterruptedException e) {
+            hookahBar.removeBarClient();
             logger.error("Interrupted exception found");
-            Thread.currentThread().interrupt();
         } catch (FreeHookahNotFoundException e) {
             hookahBar.removeBarClient();
 
@@ -67,14 +73,9 @@ public class CompanyClient implements Client, Runnable {
                     + " and " + String.join(", ", friends)
                     + " because they wait too much time");
             logger.info(MessageFormat.format(StringPool.IN_BAR_NOW, hookahBar.getClientsInBarNow()));
-
+        } finally {
             Thread.currentThread().interrupt();
         }
 
-        hookahBar.removeBarClient();
-        logger.info(MessageFormat.format(StringPool.LEAVE_BAR, liderName)
-                + " and " + String.join(", ", friends) + "\n"
-                + MessageFormat.format(StringPool.IN_BAR_NOW, hookahBar.getClientsInBarNow()));
-        Thread.currentThread().interrupt();
     }
 }

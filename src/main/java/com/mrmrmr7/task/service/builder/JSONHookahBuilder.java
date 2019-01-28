@@ -13,9 +13,7 @@ import java.util.List;
 public class JSONHookahBuilder {
     public List<Hookah> build(String JSONPath) throws InvalidHookahException, IOException {
         Gson gson = new Gson();
-        String content = "";
-
-        content = new String(Files.readAllBytes(Paths.get(JSONPath)));
+        String content = new String(Files.readAllBytes(Paths.get(JSONPath)));
 
         List<Hookah> hookahList = Arrays.asList(gson.fromJson(content, Hookah[].class));
 

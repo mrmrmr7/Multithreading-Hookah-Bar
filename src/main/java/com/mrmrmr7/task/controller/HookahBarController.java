@@ -25,18 +25,21 @@ class HookahBarController{
         }
     }
 
-    void closeEmptyBar() {
-        try {
-            while (hookahBar.getClientsInBarNow().get() > 0) {
-                    Thread.sleep(AppConstant.CHECK_FOR_EMPTY_BAR_PING);
-            }
-        } catch (InterruptedException e) {
-            logger.error("Thread has InterruptedException exception", e);
-        }
-        executorService.shutdown();
-    }
-
     void addClient(Runnable client) {
         executorService.submit(client);
+    }
+
+    void closeEmptyBar() {
+        try {
+            while (hookahBar.getClientsInBarNow().get() > 0)
+            {
+                    Thread.sleep(10);
+            }
+            executorService.shutdown();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            Thread.currentThread().interrupt();
+        }
     }
 }

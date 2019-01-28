@@ -11,6 +11,7 @@ public class HookahBarService {
 
     public synchronized boolean tryAddBarClient() throws InterruptedException {
         int timeOutCounter = 0;
+
         while (!bar.getBarSemaphore().tryAcquire()) {
             Thread.sleep(100);
             timeOutCounter++;
@@ -39,6 +40,7 @@ public class HookahBarService {
 
     public synchronized int getFreeHookah(String name) throws InterruptedException, FreeHookahNotFoundException {
         List<Hookah> hookahList = bar.getHookahs();
+
         if (name.equalsIgnoreCase("ANY")) {
             bar.getHookahSemaphore().acquire();
 

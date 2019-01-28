@@ -55,20 +55,17 @@ public class SingleClient implements Client, Runnable {
                 logger.info(MessageFormat.format(StringPool.RETURN_HOOKAH, name, hookahBar.getHookahNameByNum(freeHookahNum)));
                 hookahBar.removeHookah(freeHookahNum);
             }
+
+            hookahBar.removeBarClient();
+            logger.info(MessageFormat.format(StringPool.LEAVE_BAR, name) + "\n"
+                    + MessageFormat.format(StringPool.IN_BAR_NOW, hookahBar.getClientsInBarNow()));
         } catch (InterruptedException e) {
             logger.error("Interrupted exception found");
         } catch (FreeHookahNotFoundException e) {
             logger.error("Free hookah not found");
+        } finally {
+            Thread.currentThread().interrupt();
         }
-
-
-        hookahBar.removeBarClient();
-        logger.info(MessageFormat.format(StringPool.LEAVE_BAR, name) + "\n"
-                + MessageFormat.format(StringPool.IN_BAR_NOW, hookahBar.getClientsInBarNow()));
-    }
-
-    public String getName() {
-        return name;
     }
 
     @Override

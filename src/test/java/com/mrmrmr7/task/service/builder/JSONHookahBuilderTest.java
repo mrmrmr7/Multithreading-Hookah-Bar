@@ -17,10 +17,14 @@ class JSONHookahBuilderTest {
         List<Hookah> actualHookahs = new ArrayList<>();
 
         try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            //заглушка т.к. не успевают закрываться файлы на чтение в других тестах
+        }
+
+        try {
             actualHookahs.addAll(hookahBuilder.build("src/main/resources/hookah"));
-        } catch (InvalidHookahException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (InvalidHookahException | IOException e) {
             e.printStackTrace();
         }
 

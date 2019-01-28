@@ -18,12 +18,6 @@ public class HookahValidator {
     }
 
     public boolean validate(Hookah hookah) {
-        if (hookah.getCost() < 0) {
-            return false;
-        } else if (hookah.getName().isEmpty()) {
-            return false;
-        }
-
-        return true;
+        return !((hookah.getCost() < 0) || (hookah.getName().isEmpty()));
     }
 }
