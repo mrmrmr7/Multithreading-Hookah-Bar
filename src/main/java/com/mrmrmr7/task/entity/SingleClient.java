@@ -37,6 +37,7 @@ public class SingleClient implements Client, Runnable {
     @Override
     public void run() {
         logger.info(MessageFormat.format(StringPool.FIND_BAR, name));
+
         HookahBarService hookahBar = new HookahBarService();
 
         try {
@@ -46,29 +47,24 @@ public class SingleClient implements Client, Runnable {
                 logger.warn(name + "Too much time wait for hookah!!");
                 Thread.currentThread().interrupt();
             }
-        } catch (InterruptedException e) {
-            logger.error("Interrupted exception fouid");
-        }
 
-            try {
-                if (wantHookah) {
-                    int freeHookahNum = 0;
-                    freeHookahNum = hookahBar.getFreeHookah(this.hookahName);
-                    logger.info(MessageFormat.format(StringPool.GET_HOOKAH, name, hookahBar.getHookahNameByNum(freeHookahNum)));
-                    Thread.sleep(AppConstant.TIME_OF_SMOKE);
-                    logger.info(MessageFormat.format(StringPool.RETURN_HOOKAH, name, hookahBar.getHookahNameByNum(freeHookahNum)));
-                    hookahBar.removeHookah(freeHookahNum);
-                }
-            } catch (InterruptedException e) {
-                logger.error("Interrupted exception found");
-            } catch (FreeHookahNotFoundException e) {
-                logger.error("Free hookah not found");
+            if (wantHookah) {
+                int freeHookahNum = hookahBar.getFreeHookah(this.hookahName);
+                logger.info(MessageFormat.format(StringPool.GET_HOOKAH, name, hookahBar.getHookahNameByNum(freeHookahNum)));
+                Thread.sleep(AppConstant.TIME_OF_SMOKE);
+                logger.info(MessageFormat.format(StringPool.RETURN_HOOKAH, name, hookahBar.getHookahNameByNum(freeHookahNum)));
+                hookahBar.removeHookah(freeHookahNum);
             }
+        } catch (InterruptedException e) {
+            logger.error("Interrupted exception found");
+        } catch (FreeHookahNotFoundException e) {
+            logger.error("Free hookah not found");
+        }
 
 
         hookahBar.removeBarClient();
-        logger.info(MessageFormat.format(StringPool.LEAVE_BAR, name));
-        logger.info(MessageFormat.format(StringPool.IN_BAR_NOW, hookahBar.getClientsInBarNow()));
+        logger.info(MessageFormat.format(StringPool.LEAVE_BAR, name) + "\n"
+                + MessageFormat.format(StringPool.IN_BAR_NOW, hookahBar.getClientsInBarNow()));
     }
 
     public String getName() {
